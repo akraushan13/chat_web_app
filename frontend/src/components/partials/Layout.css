@@ -1,0 +1,7 @@
+.layout__container {
+margin : 0px;
+display: flex;
+width : 100%;
+position : relative;
+overflow : hidden;
+}

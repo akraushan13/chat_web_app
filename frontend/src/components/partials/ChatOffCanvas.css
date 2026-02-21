@@ -1,0 +1,64 @@
+.chatoffcanvas__container{
+    position: absolute;
+    height : 100vh;
+    background : #eee;
+    right: 0;
+    width: 0;
+    z-index: 999999;
+    transition: 0.2s;
+}
+
+
+.chatoffcanvas__active{
+    width : 300px;
+    padding : 20px;
+    margin : 0px;
+}
+
+.chatoffcanvas__header{
+    display : flex;
+    justify-content: space-between;
+    width : 100%;
+    align-items: center;
+
+}
+
+.chatoffcanvas__close{
+    cursor: pointer;
+}
+
+.chatoffcanvas__subcontent{
+    margin : 20px 0;
+}
+
+.chatoffcanvas__form{
+    margin :10px 0;
+}
+
+.chatoffcanvas__form input{
+    width : 100%;
+    border : 0.1px solid lightgrey;
+    height : 35px;
+    margin : 5px 0;
+    padding : 0 10px;
+    outline : none;
+    border-radius: 7px;
+}
+
+.chatoffcanvas__form textarea{
+    width : 100%;
+    border : 0.1px solid lightgrey;
+    height : 50px;
+    margin : 5px 0;
+    padding : 10px;
+    outline : none;
+    border-radius: 7px;
+}
+
+.chatoffcanvas__form button{
+    background : black;
+    color : white;
+    padding : 10px 20px;
+    border-radius : 10px;
+    cursor : pointer;
+}

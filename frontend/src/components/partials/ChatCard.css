@@ -1,0 +1,15 @@
+.chatcard__container {
+padding: 15px 20px;
+display: flex;
+align-items: center;
+cursor : pointer;
+}
+
+.chatcard__container:hover{
+    background : #eee;
+ }
+
+ .chatcard__link{
+     text-decoration : none;
+     color : black;
+ }

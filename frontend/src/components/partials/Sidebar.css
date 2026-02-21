@@ -1,0 +1,86 @@
+.sidebar__container{
+  background: white;
+  flex: 0.4;
+  border-right: 0.3px solid #cdcdcd;
+  height : 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.sidebar__usersection{
+  background: #eee;
+  display: flex;
+  padding: 5px 15px;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 0.1px solid whitesmoke;
+  z-index: 999;
+}
+
+.sidebar__searchcontainer{
+    margin: 15px 15px;
+    background-color: #eee;
+    display: flex;
+    padding: 10px 20px;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.sidebar__searchinput{
+    flex: 1;
+    height: 30px;
+    outline: none;
+    border: none;
+    background: none;
+}
+
+.popup-content {
+  margin: auto;
+  background: rgb(255, 255, 255);
+  width: auto !important;
+  padding: 20px !important;
+}
+
+.add__btn{
+  border-radius: 100px;
+  border: none;
+  background: black;
+  color: white;
+  padding: 5px 7px;
+  cursor: pointer;
+}
+
+.menu-item{
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menu-item:hover{
+  background-color: #eee;
+}
+
+.sidebar__nocontact{
+  text-align: center;
+}
+
+.btn__disabled{
+  cursor: auto;
+  background-color: grey;
+  
+}
+
+
+.sidebar__contact__list{
+  overflow: scroll;
+  height: 100vh;
+}
+
+.sidebar__contact__list::-webkit-scrollbar {
+  width: 0.2em;
+  height: 0.2em;
+ }
+
+.sidebar__contact__list::-webkit-scrollbar-thumb {
+  background-color: lightgrey;
+  border-radius: 3px;
+}
