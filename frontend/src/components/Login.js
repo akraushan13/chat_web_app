@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
+import "./Auth.css"
 
-const Login = ({setIsLoggedIn }) => {
-
+const Login = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
@@ -12,13 +12,8 @@ const Login = ({setIsLoggedIn }) => {
 
     const res = await fetch("http://127.0.0.1:8000/api/login/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username,
-        password
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
     })
 
     const data = await res.json()
@@ -26,8 +21,7 @@ const Login = ({setIsLoggedIn }) => {
     if (res.ok) {
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", data.user)
-
-      setIsLoggedIn(true);
+      setIsLoggedIn(true)
       navigate("/")
     } else {
       alert(data.error || "Login failed")
@@ -35,30 +29,36 @@ const Login = ({setIsLoggedIn }) => {
   }
 
   return (
-    <div className="auth__container">
-      <h2>Login</h2>
+    <div className="auth-wrapper">
+      <div className="auth-card">
+        <h2>Sign In</h2>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Phone / Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <form onSubmit={handleLogin}>
+          <input
+            className="auth-input"
+            type="text"
+            placeholder="Username / Phone"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            className="auth-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <button className="auth-btn" type="submit">
+            Sign In
+          </button>
+        </form>
 
-      <p>
-        Don’t have account? <Link to="/signup">Signup</Link>
-      </p>
+        <div className="auth-footer">
+          Don’t have an account? <Link to="/signup">Sign Up</Link>
+        </div>
+      </div>
     </div>
   )
 }
