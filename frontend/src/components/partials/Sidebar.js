@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import {getToken } from '../../utils'
 
 
-const Sidebar = () => {
+const Sidebar = ({ setIsLoggedIn } ) => {
   const [search, setSearch] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [displayName, setDisplayName] = useState('')
@@ -91,8 +91,10 @@ const Sidebar = () => {
       })
   }
   const handleLogout = () => {
-    localStorage.clear('token')
-    window.location.reload()
+    localStorage.removeItem('token')
+		localStorage.removeItem('user')
+		setIsLoggedIn(false)
+		navigate("/login")
   }
   
   const editProfile = data => {

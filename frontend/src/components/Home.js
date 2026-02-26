@@ -1,9 +1,9 @@
 import './Home.css'
 import Layout from "./partials/Layout";
 
-const Home = () => {
+const Home = ({ setIsLoggedIn }) => {
   return (
-    <Layout>
+    <Layout setIsLoggedIn={setIsLoggedIn}>
       <div className="home__container">
         <div className="home__intro">
           <h3>Welcome to Allieva Pharma Chat Application</h3>

@@ -4,7 +4,7 @@ import { useParams, Navigate } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 import { getToken  } from '../utils'
 
-const ChatDetail = ({ isLoggedIn }) => {
+const ChatDetail = () => {
   const { id } = useParams()
   const [contact, setContact] = useState(null)
   const [messages, setMessages] = useState([])
@@ -14,8 +14,6 @@ const ChatDetail = ({ isLoggedIn }) => {
 
   // Fetch contact
   useEffect(() => {
-    if (!isLoggedIn) return
-
     fetch(`http://127.0.0.1:8000/api/contacts/${id}/`, {
       headers: {
         Authorization: `Token ${getToken()}`,
@@ -27,7 +25,7 @@ const ChatDetail = ({ isLoggedIn }) => {
         setContact(data)
         setSlug(data.chat_slug)
       })
-  }, [id, isLoggedIn])
+  }, [id])
 
   // LOAD OLD MESSAGES FROM DB
 useEffect(() => {
@@ -96,8 +94,6 @@ const handleSendMessage = (text) => {
   }
 };
 
-
-  if (!isLoggedIn) return <Navigate replace to="/" />
 
   return (
     <Layout>

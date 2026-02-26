@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = ({setIsLoggedIn }) => {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -26,7 +26,8 @@ const Login = ({ setIsLoggedIn }) => {
     if (res.ok) {
       localStorage.setItem("token", data.token)
       localStorage.setItem("user", data.user)
-      setIsLoggedIn(true)
+
+      setIsLoggedIn(true);
       navigate("/")
     } else {
       alert(data.error || "Login failed")

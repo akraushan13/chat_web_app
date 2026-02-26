@@ -13,7 +13,7 @@ const ChatCard = ({contacts}) => {
             <h5>
                 {contact.name} {contact.contact.verified ? <VerifiedIcon style={{width : 15, height : 15, color : 'green'}} /> : ''}
             </h5>
-            <p>You're doing Well</p>
+            <p></p>
         </div>
         </Link>
     </div>
