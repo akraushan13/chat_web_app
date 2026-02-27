@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, get_user_model
-from rest_framework.permissions import IsAuthenticated
+
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import status
 
@@ -26,12 +28,13 @@ class SignupView(APIView):
             return Response({"error": "User already exists"}, status=400)
 
         user = User.objects.create_user(username=username, password=password)
-        token = Token.objects.create(user=user)
+        
 
         return Response({
-            "token": token.key,
             "user": user.username
         }, status=201)
+
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class LoginView(APIView):
     def post(self, request):
@@ -39,23 +42,37 @@ class LoginView(APIView):
         password = request.data.get("password")
 
         user = authenticate(username=username, password=password)
-        
-        if user is None:
+
+        if not user:
             return Response(
-                {"error": "Invalid credentials"} ,
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid credentials"},
+                status=400
             )
 
-        token, _ = Token.objects.get_or_create(user=user)
+        refresh = RefreshToken.for_user(user)
 
         return Response({
-            "token": token.key,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
             "user": user.username
         })
 
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response({"message": "Logout successful"})
+        except Exception:
+            return Response({"error": "Invalid token"}, status=400)
+
+
 class ProfileView(APIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

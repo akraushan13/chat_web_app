@@ -13,7 +13,7 @@ import ChatOffCanvas from './ChatOffCanvas';
 import { useState, useRef, useEffect } from 'react';
 
 
-const Chat = ({contact, messages, handleSendMessage}) => {
+const Chat = ({contact, messages, handleSendMessage, isTyping}) => {
   const userId = localStorage.getItem('user')
   const [message, setMessage] = useState('');
   const endOfMessageRef = useRef(null);
@@ -82,7 +82,7 @@ const formatDateLabel = (timestamp) => {
           </IconButton>
           <div>
             <h5>{contact && contact.name} {contact && contact.contact.verified ? <VerifiedIcon style={{width : 15, height : 15, color : 'green'}} /> : ''}</h5>
-            <p>Online</p>
+            <p>{isTyping ? "Typing..." : "Online"}</p>
           </div>
         </div>
         <div>
@@ -120,7 +120,7 @@ const formatDateLabel = (timestamp) => {
 
       <div
         className={`chat__message ${
-          Number(text.sender) === Number(userId) ? 'message__right' : ''
+          Number(text.sender_id) === Number(userId) ? 'message__right' : ''
         }`}
         key={text.id}
       >
@@ -131,7 +131,7 @@ const formatDateLabel = (timestamp) => {
             {formatTime(text.timestamp)}
           </span>
 
-          {Number(text.sender) === Number(userId) && (
+          {Number(text.sender_id) === Number(userId) && (
             <span className="chat__status">
               {text.is_read ? "✓✓" : text.is_delivered ? "✓" : ""}
             </span>
@@ -155,7 +155,10 @@ const formatDateLabel = (timestamp) => {
         </div>
         <form className="chat__form" onSubmit={sendMessage}>
           <input placeholder="Message Here" className="chat__input"
-          value={message} onChange={e => setMessage(e.target.value)}/>
+          value={message} onChange={e => {
+  													setMessage(e.target.value)
+  													handleSendMessage({ type: "typing" })
+													}}/>
         </form>
         <div>
         {message ? (

@@ -9,4 +9,4 @@ class ChatMessageListView(generics.ListAPIView):
     def get_queryset(self):
         slug = self.kwargs["slug"]
         chat = Chat.objects.get(slug=slug)
-        return chat.messages.all()
+        return Message.objects.filter(chat=chat).order_by("timestamp")

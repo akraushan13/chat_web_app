@@ -11,3 +11,7 @@
   width: 400px !important;
   padding: 20px !important;
 }
+
+body {
+  background-color: #f4f6f8;
+}

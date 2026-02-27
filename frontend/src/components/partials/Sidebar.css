@@ -34,12 +34,6 @@
     background: none;
 }
 
-.popup-content {
-  margin: auto;
-  background: rgb(255, 255, 255);
-  width: auto !important;
-  padding: 20px !important;
-}
 
 .add__btn{
   border-radius: 100px;
@@ -71,8 +65,8 @@
 
 
 .sidebar__contact__list{
-  overflow: scroll;
-  height: 100vh;
+  overflow-y: auto;
+  height: calc(100vh - 120px);
 }
 
 .sidebar__contact__list::-webkit-scrollbar {
@@ -83,4 +77,9 @@
 .sidebar__contact__list::-webkit-scrollbar-thumb {
   background-color: lightgrey;
   border-radius: 3px;
+}
+
+
+.sidebar__container{
+  z-index: 100;
 }

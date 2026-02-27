@@ -1,28 +1,25 @@
 import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { signupUser } from "../api/authService"
 import "./Auth.css"
 
 const Signup = () => {
+
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const navigate = useNavigate()
 
   const handleSignup = async (e) => {
     e.preventDefault()
 
-    const res = await fetch("http://127.0.0.1:8000/api/signup/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    })
+    try {
+      await signupUser({ username, password })
 
-    const data = await res.json()
-
-    if (res.status === 201) {
       alert("Signup successful! Please login.")
-      navigate("/login")
-    } else {
-      alert(data.error || "Signup failed")
+
+      window.location.href = "/login"
+
+    } catch (err) {
+      alert(err.message)
     }
   }
 

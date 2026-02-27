@@ -2,18 +2,17 @@ from rest_framework import serializers
 from chat.models import Message
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = serializers.CharField(source="sender.username")
-    # timestamp = serializers.SerializerMethodField()
+    sender_id = serializers.IntegerField(source="sender.id", read_only=True)
+    sender_username = serializers.CharField(source="sender.username", read_only=True)
 
     class Meta:
         model = Message
         fields = [
-            "id", "sender",
+            "id",
+            "sender_id",
+            "sender_username",
             "content",
             "timestamp",
             "is_delivered",
             "is_read",
         ]
-    
-    # def get_timestamp(self , obj):
-    #     return obj.timestamp.strftime("%H:%M")

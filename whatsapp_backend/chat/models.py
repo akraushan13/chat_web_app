@@ -29,6 +29,10 @@ class Message(models.Model):
 
     class Meta:
         ordering = ["timestamp"]
+        indexes = [
+            models.Index(fields=["chat" , "timestamp"]) ,
+            models.Index(fields=["sender"]) ,
+        ]
 
     def __str__(self):
         return f"{self.sender} - {self.content[:20]}"

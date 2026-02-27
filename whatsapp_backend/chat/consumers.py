@@ -27,7 +27,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         self.room_group_name = f"chat_{self.room_slug}"
         
-        await self.mark_messages_as_read(self.user)
+        updated = await self.mark_messages_as_read(self.user)
+        
+        if updated:
+            await self.channel_layer.group_send(
+                self.room_group_name ,
+                {
+                    "type": "read_event" ,
+                    "reader": self.user.id ,
+                }
+            )
         
         await self.channel_layer.group_add(
             self.room_group_name ,
@@ -44,6 +53,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        
+        if data["type"] == "typing":
+            await self.channel_layer.group_send(
+                self.room_group_name ,
+                {
+                    "type": "typing_event" ,
+                    "sender": self.user.id ,
+                }
+            )
+            return
+        
+        if data["type"] == "read":
+            await database_sync_to_async(
+                Message.objects.filter(
+                    chat__slug=self.room_slug ,
+                    is_read=False
+                ).exclude(sender=self.user).update
+            )(is_read=True)
+            
+            await self.channel_layer.group_send(
+                self.room_group_name ,
+                {
+                    "type": "read_event" ,
+                    "reader": self.user.id ,
+                }
+            )
+            
+            return
+        
         content = data["content"]
         user = self.scope["user"]
 
@@ -55,7 +93,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat_message",
                 "message": {
                     "id": saved_message.id,
-                    "sender": saved_message.sender.username,
+                    "sender_id": saved_message.sender.id,
+                    "sender_username": saved_message.sender.username,
                     "content": saved_message.content,
                     "timestamp": saved_message.timestamp.isoformat(),
                     "is_delivered": True ,
@@ -63,7 +102,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             }
         )
-
+    
+    async def typing_event(self , event):
+        await self.send(text_data=json.dumps({
+            "type": "typing" ,
+            "sender": event["sender"]
+        }))
+    
+    async def read_event(self , event):
+        await self.send(text_data=json.dumps({
+            "type": "read" ,
+            "reader": event["reader"]
+        }))
+    
     async def chat_message(self, event):
         await self.send(text_data=json.dumps(event["message"]))
 
@@ -85,6 +136,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def mark_messages_as_read(self , user):
         chat = Chat.objects.get(slug=self.room_slug)
         
-        Message.objects.filter(
-            chat=chat
+        updated = Message.objects.filter(
+            chat=chat ,
+            is_read=False
         ).exclude(sender=user).update(is_read=True)
+        
+        return updated > 0

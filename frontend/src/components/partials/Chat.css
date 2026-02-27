@@ -18,9 +18,8 @@
 
 .chat__main{
   height: 79vh;
-  overflow: scroll;
+  overflow-y: auto;
   padding: 35px;
-  
 }
 
 .chat__bottom{
@@ -103,4 +102,8 @@ new
   border-radius: 10px;
   width: fit-content;
   color: #555;
+}
+
+.chat__message {
+  word-wrap: break-word;
 }

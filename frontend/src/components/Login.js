@@ -1,30 +1,23 @@
 import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
+import { loginUser } from "../api/authService"
 import "./Auth.css"
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = () => {
+
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
 
-    const res = await fetch("http://127.0.0.1:8000/api/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    })
+    try {
+      await loginUser({ username, password })
 
-    const data = await res.json()
+      window.location.href = "/"
 
-    if (res.ok) {
-      localStorage.setItem("token", data.token)
-      localStorage.setItem("user", data.user)
-      setIsLoggedIn(true)
-      navigate("/")
-    } else {
-      alert(data.error || "Login failed")
+    } catch (err) {
+      alert(err.message)
     }
   }
 

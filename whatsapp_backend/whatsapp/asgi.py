@@ -12,7 +12,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 import chat.routing
-from .middleware import TokenAuthMiddleware
+from .middleware import JWTAuthMiddleware
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "whatsapp.settings")
 
@@ -20,7 +20,7 @@ django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
-    "websocket": TokenAuthMiddleware(
+    "websocket": JWTAuthMiddleware(
         URLRouter(
             chat.routing.websocket_urlpatterns
         )
