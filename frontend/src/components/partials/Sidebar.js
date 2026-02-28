@@ -39,17 +39,13 @@ const Sidebar = ({ setIsLoggedIn }) => {
     setOffCanvasIsOpen(status)
   }
 
-  // ==============================
-  // Load Profile + Contacts
-  // ==============================
+
   useEffect(() => {
     apiClient("/api/profile/").then(setProfile)
     fetchContacts().then(setContacts)
   }, [])
 
-  // ==============================
-  // Search Contacts
-  // ==============================
+
   const handleSearch = (value) => {
     setSearch(value)
 
@@ -60,9 +56,7 @@ const Sidebar = ({ setIsLoggedIn }) => {
     }
   }
 
-  // ==============================
-  // Verify Phone Number
-  // ==============================
+
   const handleCheckUser = async (value) => {
     setPhoneNumber(value)
 
@@ -77,9 +71,7 @@ const Sidebar = ({ setIsLoggedIn }) => {
     setCanAdd(data.can_add)
   }
 
-  // ==============================
-  // Add Contact
-  // ==============================
+
   const handleAddContact = async (e) => {
     e.preventDefault()
 
@@ -118,7 +110,7 @@ const editProfileImage = async (image) => {
 
   const updatedProfile = await apiClient("/api/edit-profile/", {
     method: "PATCH",
-    headers: {}, // important: don't override multipart header
+    headers: {},
     body: formData
   })
 
@@ -131,9 +123,7 @@ const editProfileImage = async (image) => {
   }, 1500)
 }
 
-  // ==============================
-  // Logout
-  // ==============================
+
   const handleLogout = async () => {
   try {
     await apiClient("/api/logout/", {
@@ -148,7 +138,6 @@ const editProfileImage = async (image) => {
 
   clearAuth()
 
-  // Hard redirect (forces full cleanup)
   window.location.href = "/login"
 }
 
@@ -166,7 +155,6 @@ const editProfileImage = async (image) => {
   />
 )}
 
-      {/* ================= Top Section ================= */}
       <div className="sidebar__usersection">
         <div
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}

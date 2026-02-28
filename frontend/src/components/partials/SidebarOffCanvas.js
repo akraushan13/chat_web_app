@@ -24,18 +24,12 @@ const SidebarOffCanvas = ({
     }
   }, [profile])
 
-  // ==========================
-  // Submit Profile Update
-  // ==========================
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!editProfile) return
     editProfile({ name, bio })
   }
 
-  // ==========================
-  // Upload Image
-  // ==========================
   const handleImageUpload = (file) => {
     if (!file || !editProfileImage) return
     editProfileImage(file)

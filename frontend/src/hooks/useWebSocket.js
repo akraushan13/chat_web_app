@@ -31,7 +31,7 @@ export const useWebSocket = (slug, onMessage) => {
       console.log("WS connected")
       reconnectAttempts.current = 0
 
-      // ✅ Send read event AFTER socket is open
+      // Send read event AFTER socket is open
       socketRef.current?.send(
         JSON.stringify({ type: "read" })
       )
@@ -39,7 +39,7 @@ export const useWebSocket = (slug, onMessage) => {
 socket.onmessage = (event) => {
   const data = JSON.parse(event.data)
 
-  // 🔥 Ignore messages if slug changed
+  //  Ignore messages if slug changed
   if (!socketRef.current || socket !== socketRef.current) {
     return
   }

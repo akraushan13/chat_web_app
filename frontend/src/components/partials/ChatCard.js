@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 
 const ChatCard = ({contacts}) => {
     const listItems = contacts && contacts.map((contact, index) =>
-    <div key={contact.pk} className="chatcard__container">
+    <div key={contact.pk || contact.slug} className="chatcard__container">
         <Avatar src={contact.contact.image}/>
         <Link to={`/${contact.slug}`} className="chatcard__link">
         <div style={{margin : '0 10px', width : '100%'}}>
