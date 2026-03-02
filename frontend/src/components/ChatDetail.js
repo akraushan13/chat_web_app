@@ -34,7 +34,7 @@ const ChatDetail = () => {
 
   const data = await fetchMessages(slug, nextPage)
 
-  const older = data.results || []
+  const older = (data.results || []).reverse()
 	setMessages(prev => [...older, ...prev])
 
   setPage(nextPage)
@@ -131,7 +131,7 @@ const ChatDetail = () => {
   	console.log("API DATA:", data)
 
     // Reverse because backend returns newest first
-    setMessages(data.results || [])
+    setMessages((data.results || []).reverse())
     setHasMore(!!data.next)
 
     if (!hasSentRead.current) {

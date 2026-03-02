@@ -125,8 +125,9 @@ const Chat = ({contact, messages, handleSendMessage, isTyping, onLoadOlder}) => 
 
         {messages &&
   [...messages]
-    .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
     .map((text, index, sortedMessages) => {
+    console.log("MSG:", text.sender_id, "ME:", userId)
+    console.log("MSG sender:", text.sender_id, "ME:", userId)
 
       const currentDate = new Date(text.timestamp).toDateString()
 

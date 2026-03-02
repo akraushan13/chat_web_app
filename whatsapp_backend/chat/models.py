@@ -28,7 +28,6 @@ class Message(models.Model):
     is_read = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["timestamp"]
         indexes = [
             models.Index(fields=["chat" , "timestamp"]) ,
             models.Index(fields=["sender"]) ,

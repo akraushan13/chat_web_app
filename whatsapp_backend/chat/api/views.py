@@ -17,4 +17,4 @@ class ChatMessageListView(generics.ListAPIView):
         slug = self.kwargs["slug"]
         chat = Chat.objects.get(slug=slug)
         
-        return Message.objects.filter(chat=chat).order_by("timestamp")
+        return Message.objects.filter(chat=chat).order_by("-timestamp")
