@@ -8,7 +8,7 @@ export const useGlobalWebSocket = (onMessage) => {
   const socketRef = useRef(null)
   const messageHandlerRef = useRef(onMessage)
 
-  // Always keep latest handler
+  // Keep latest handler
   useEffect(() => {
     messageHandlerRef.current = onMessage
   }, [onMessage])
@@ -18,30 +18,42 @@ export const useGlobalWebSocket = (onMessage) => {
     const token = getAccessToken()
     if (!token) return
 
+    // Close old socket before opening new one
+    if (socketRef.current) {
+      socketRef.current.close()
+    }
+
     const socket = new WebSocket(
       `${WS_BASE}/ws/chat/?token=${token}`
     )
 
     socketRef.current = socket
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      messageHandlerRef.current(data)
-    }
-
     socket.onopen = () => {
       console.log("GLOBAL WS CONNECTED")
+    }
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      messageHandlerRef.current?.(data)
     }
 
     socket.onclose = () => {
       console.log("GLOBAL WS CLOSED")
     }
 
-    return () => {
-      socket.close()
+    socket.onerror = (err) => {
+      console.log("WS ERROR", err)
     }
 
-  }, []) // EMPTY DEP ARRAY
+    return () => {
+      if (socket.readyState === WebSocket.OPEN ||
+          socket.readyState === WebSocket.CONNECTING) {
+        socket.close()
+      }
+    }
+
+  }, [getAccessToken()])   // re-run if token changes
 
   const sendMessage = (payload) => {
     if (socketRef.current?.readyState === WebSocket.OPEN) {

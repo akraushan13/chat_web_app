@@ -14,6 +14,24 @@ from django.db.models import Count
 
 User = get_user_model()
 
+from django.db import transaction
+
+def get_or_create_private_chat(user1, user2):
+    chats = Chat.objects.filter(
+        participants=user1
+    ).filter(
+        participants=user2
+    )
+
+    if chats.exists():
+        return chats.first()
+
+    with transaction.atomic():
+        chat = Chat.objects.create()
+        chat.participants.set([user1, user2])
+        return chat
+
+
 class ContactListCreateView(generics.ListCreateAPIView):
     serializer_class = ContactSerializer
     permission_classes = [IsAuthenticated]
@@ -42,26 +60,14 @@ class ContactListCreateView(generics.ListCreateAPIView):
                 status=404
             )
         
-        # SAFE CHECK
-        chat = Chat.objects.filter(
-            participants=request.user
-        ).filter(
-            participants=other_user
-        ).annotate(
-            num_participants=Count("participants")
-        ).filter(
-            num_participants=2
-        ).first()
-        
-        if not chat:
-            chat = Chat.objects.create()
-            chat.participants.set([request.user , other_user])
-        
         contact = Contact.objects.create(
             user=request.user ,
             name=display_name ,
             contact=other_user
         )
+        
+        # SAFE CHECK
+        chat = get_or_create_private_chat(request.user, other_user)
         
         serializer = ContactSerializer(contact)
         return Response(serializer.data , status=201)
